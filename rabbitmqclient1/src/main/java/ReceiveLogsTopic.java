@@ -8,22 +8,24 @@ public class ReceiveLogsTopic {
 
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
+
+        // TODO: change this to the docker container name or the Rabbitmq server
         factory.setHost("clinbase.nuchange.ca");
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        //channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC);
         String queueName = channel.queueDeclare().getQueue();
 
-//        if (argv.length < 1) {
-//            System.err.println("Usage: ReceiveLogsTopic [binding_key]...");
-//            System.exit(1);
-//        }
-//
-//        for (String bindingKey : argv) {
-//            channel.queueBind(queueName, EXCHANGE_NAME, bindingKey);
-//        }
-
+        /*
+         TODO: change the filter as required
+         metadata.<type>.<action>.<id>
+         Where type can be any type inside of DHIS2 (data element, indicator, org unit, etc)
+         action is CREATE, UPDATE, DELETE and
+         id is the id of the type being handled.
+         The event also contains a payload, for CREATE and DELETE
+         this is the full serialized version of the object,
+         for UPDATE its a patch containing the updates that are happening on that object.
+        */
         channel.queueBind(queueName, EXCHANGE_NAME, "#");
 
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
