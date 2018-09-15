@@ -12,17 +12,19 @@ public class ReceiveLogsTopic {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
-        channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC);
+        //channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC);
         String queueName = channel.queueDeclare().getQueue();
 
-        if (argv.length < 1) {
-            System.err.println("Usage: ReceiveLogsTopic [binding_key]...");
-            System.exit(1);
-        }
+//        if (argv.length < 1) {
+//            System.err.println("Usage: ReceiveLogsTopic [binding_key]...");
+//            System.exit(1);
+//        }
+//
+//        for (String bindingKey : argv) {
+//            channel.queueBind(queueName, EXCHANGE_NAME, bindingKey);
+//        }
 
-        for (String bindingKey : argv) {
-            channel.queueBind(queueName, EXCHANGE_NAME, bindingKey);
-        }
+        channel.queueBind(queueName, EXCHANGE_NAME, "#");
 
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
